@@ -1,6 +1,6 @@
 # Introduction
 This repository contains source code for [	
-RAIN: Real-time Animation Of Infinite Video Stream](https://arxiv.org). A real-time implementation for video generataion on customer-level devices.
+RAIN: Real-time Animation Of Infinite Video Stream](https://arxiv.org/abs/2412.19489). A real-time implementation for video generataion on customer-level devices.
 
 Project Page is [here](https://pscgylotti.github.io/pages/RAIN).
 
@@ -22,7 +22,7 @@ pip install -r requirements_inference.txt
 ```
 
 ## Weights
-You can download original RAIN weights from [Google Drive](), [Huggingeface Hub](), and then put them into `weights/torch/`.
+You can download original RAIN weights from [Google Drive](https://drive.google.com/drive/folders/1xm8kdjWKgc1xbou63U7OhgSzqxzNUCsQ?usp=drive_link), [Huggingeface Hub](https://huggingface.co/Pscgylotti/RAIN-v0.1/tree/main), and then put them into `weights/torch/`.
 
 You can get `'taesdv.pth'` from https://github.com/madebyollin/taesdv, and put it into `weights/torch/`.
 
