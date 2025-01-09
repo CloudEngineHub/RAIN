@@ -39,6 +39,7 @@ class unet_work(nn.Module): # Ugly Power Strip
         pmem0, pmem1, pmem2, pmem3, pmem4, pmem5, pmem6, pmem7, pmem8, pmem9,
         ):
         new_pose_cond_fea = self.pose_guider(pose)
+        #pose_cond_fea = new_pose_cond_fea.repeat(1,1,4,1,1)
         pose_cond_fea = torch.cat([pose_cond_fea, new_pose_cond_fea], dim=2)
         score = self.unet(sample, self.timestep, encoder_hidden_states, pose_cond_fea, self.w_embedding, d00, d01, d10, d11, d20, d21, m, u10, u11, u12, u20, u21, u22, u30, u31, u32)
         result = self.scheduler.step(

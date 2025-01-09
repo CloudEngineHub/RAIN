@@ -12,3 +12,4 @@ weights/onnx/unet_work_opt
 *.engine
 *.bin
 *.depreciated
+*.ipynb
