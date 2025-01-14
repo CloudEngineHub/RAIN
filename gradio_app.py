@@ -30,7 +30,11 @@ jaw_width_ratio=0.9,
 eye_horizontal_correction=0.15,
 eye_distance_correction=0.05,
 eye_vertical_correction=0.10,
-mouth_horizontal_correction=0.15)
+mouth_horizontal_correction=0.15,
+mouth_vertical_correction=0.03,
+nose_horizontal_correction=0.1,
+nose_vertical_correction=0.05,
+)
 
 def transform_func(frame):
     global timestamp
@@ -193,7 +197,7 @@ def stop_offline_process():
     a.stop()
     work_flag = False
 
-def param2translations(face_length_ratio=0.75, eye_height_ratio=3.0, eye_width_ratio=1.6, mouth_height_ratio=1.2, mouth_width_ratio=0.67, jaw_width_ratio=0.9, eye_horizontal_correction=0.15, eye_distance_correction=0.05, eye_vertical_correction=0.10, mouth_horizontal_correction=0.15):
+def param2translations(face_length_ratio=0.75, eye_height_ratio=3.0, eye_width_ratio=1.6, mouth_height_ratio=1.2, mouth_width_ratio=0.67, jaw_width_ratio=0.9, eye_horizontal_correction=0.15, eye_distance_correction=0.05, eye_vertical_correction=0.10, mouth_horizontal_correction=0.15, mouth_vertical_correction=0.0, nose_vertical_correction=0.0,nose_horizontal_correction=0.0):
     translations = ([
         translation(0, 68, vertical_scale=face_length_ratio, xaxis=(2, 14)),
         translation(36, 42,vertical_scale=eye_height_ratio, xaxis=(0,3), horizontal_scale=eye_width_ratio,),
@@ -204,9 +208,13 @@ def param2translations(face_length_ratio=0.75, eye_height_ratio=3.0, eye_width_r
         translation(36, 42, xaxis=(0,3), relative_length=(33, 3), horizontal_transition=-eye_horizontal_correction),
         translation(42, 48, xaxis=(0,3), relative_length=(33, 3), horizontal_transition=-(eye_horizontal_correction - eye_distance_correction)),
         translation(36, 42, xaxis=(0,3), relative_length=(19, 6), vertical_transition=eye_vertical_correction),
-        translation(42, 48, xaxis=(0,3), relative_length=(26, 12), vertical_transition=eye_vertical_correction),
+        translation(42, 48, xaxis=(0,3), relative_length=(24, 10), vertical_transition=eye_vertical_correction),
         translation(60, 68, xaxis=(0,4), relative_length=(33, 13), horizontal_transition=mouth_horizontal_correction),
         translation(60, 68, xaxis=(0,4), relative_length=(33, 3), horizontal_transition=-mouth_horizontal_correction),
+        translation(60, 68, relative_length=(27, 8), xaxis=(0, 4), vertical_transition=mouth_vertical_correction),
+        translation(27, 36, relative_length=(27, 8), xaxis=(4, 8), vertical_transition=nose_vertical_correction),
+        translation(27, 36, relative_length=(22, 16), xaxis=(4, 8), horizontal_transition=nose_horizontal_correction),
+        translation(27, 36, relative_length=(21, 0), xaxis=(4, 8), horizontal_transition=-nose_horizontal_correction),
         translation(4, 13, xaxis=(0,8), horizontal_scale=jaw_width_ratio),
     ])
     return translations
@@ -251,7 +259,6 @@ with gr.Blocks(css=css_) as demo:
     with gr.Row():
         with gr.Column():
             input_img_pose = gr.Image(sources=["webcam"])
-        with gr.Column():
             im_output_pose = gr.Image(interactive=False)
             btn8 = gr.Button("Render")
             btn8.click(fn=render_pose, inputs=input_img_pose, outputs=im_output_pose)
@@ -263,19 +270,27 @@ with gr.Blocks(css=css_) as demo:
             inp7 = gr.Slider(minimum=0.1, maximum=3.0, label="Mouth Width Ratio",value=params["mouth_width_ratio"], step=0.01)
             inp8 = gr.Slider(minimum=0.1, maximum=1.5, label="Jaw Width Ratio",value=params["jaw_width_ratio"], step=0.01)
             inp10 = gr.Slider(minimum=-0.25, maximum=0.25, label="Eye Distance Fix",value=params["eye_distance_correction"], step=0.01)
+        with gr.Column():
             inp11 = gr.Slider(minimum=-0.25, maximum=0.25, label="Eye Vertical Fix",value=params["eye_vertical_correction"], step=0.01)
             inp9 = gr.Slider(minimum=-0.25, maximum=0.25, label="Eye Horizontal Fix (Fix eye offset when facing sideways)",value=params["eye_horizontal_correction"], step=0.01)
             inp12 = gr.Slider(minimum=-0.25, maximum=0.25, label="Mouth Horizontal Fix (Fix mouth offset when facing sideways)",value=params["mouth_horizontal_correction"], step=0.01)
-            inp3.change(set_params("face_length_ratio"),[inp3, input_img_pose], [im_output_pose])
-            inp4.change(set_params("eye_height_ratio"),[inp4, input_img_pose], [im_output_pose])
-            inp5.change(set_params("eye_width_ratio"),[inp5, input_img_pose], [im_output_pose])
-            inp6.change(set_params("mouth_height_ratio"),[inp6, input_img_pose], [im_output_pose])
-            inp7.change(set_params("mouth_width_ratio"),[inp7, input_img_pose], [im_output_pose])
-            inp8.change(set_params("jaw_width_ratio"),[inp8, input_img_pose], [im_output_pose])
-            inp9.change(set_params("eye_horizontal_correction"),[inp9, input_img_pose], [im_output_pose])
-            inp10.change(set_params("eye_distance_correction"),[inp10, input_img_pose], [im_output_pose])
-            inp11.change(set_params("eye_vertical_correction"),[inp11, input_img_pose], [im_output_pose])
-            inp12.change(set_params("mouth_horizontal_correction"),[inp12, input_img_pose], [im_output_pose])
+            inp13 = gr.Slider(minimum=-0.25, maximum=0.25, label="Mouth Vertical Fix",value=params["mouth_vertical_correction"], step=0.01)
+            inp14 = gr.Slider(minimum=-0.25, maximum=0.25, label="Nose Horizontal Fix (Fix nose offset when facing sideways)",value=params["nose_horizontal_correction"], step=0.01)
+            inp15 = gr.Slider(minimum=-0.25, maximum=0.25, label="Nose Vertical Fix",value=params["nose_vertical_correction"], step=0.01)
+        inp3.change(set_params("face_length_ratio"),[inp3, input_img_pose], [im_output_pose])
+        inp4.change(set_params("eye_height_ratio"),[inp4, input_img_pose], [im_output_pose])
+        inp5.change(set_params("eye_width_ratio"),[inp5, input_img_pose], [im_output_pose])
+        inp6.change(set_params("mouth_height_ratio"),[inp6, input_img_pose], [im_output_pose])
+        inp7.change(set_params("mouth_width_ratio"),[inp7, input_img_pose], [im_output_pose])
+        inp8.change(set_params("jaw_width_ratio"),[inp8, input_img_pose], [im_output_pose])
+        inp9.change(set_params("eye_horizontal_correction"),[inp9, input_img_pose], [im_output_pose])
+        inp10.change(set_params("eye_distance_correction"),[inp10, input_img_pose], [im_output_pose])
+        inp11.change(set_params("eye_vertical_correction"),[inp11, input_img_pose], [im_output_pose])
+        inp12.change(set_params("mouth_horizontal_correction"),[inp12, input_img_pose], [im_output_pose])
+        inp13.change(set_params("mouth_vertical_correction"),[inp13, input_img_pose], [im_output_pose])
+        inp14.change(set_params("nose_horizontal_correction"),[inp14, input_img_pose], [im_output_pose])
+        inp15.change(set_params("nose_vertical_correction"),[inp15, input_img_pose], [im_output_pose])
+        
     input_img.stream(transform_func, [input_img], [output_img], time_limit=30, stream_every=1.0 / (2 * a.fps), concurrency_limit=30)
     btn5.click(fn=start_process)
     btn6.click(fn=stop_process)
