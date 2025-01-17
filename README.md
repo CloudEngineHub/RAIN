@@ -1,6 +1,6 @@
 # Introduction
 This repository contains source code for [	
-RAIN: Real-time Animation Of Infinite Video Stream](https://arxiv.org/abs/2412.19489). A real-time implementation for video generataion on customer-level devices.
+RAIN: Real-time Animation Of Infinite Video Stream](https://arxiv.org/abs/2412.19489). A real-time implementation for video generation on customer-level devices.
 
 Project Page is [here](https://pscgylotti.github.io/pages/RAIN).
 
@@ -38,15 +38,12 @@ Download `'dw-mm_ucoco.onnx'` from https://huggingface.co/hr16/UnJIT-DWPose/tree
 In `configs/rain_morpher.yaml`, modify `tensorrt: False` into `tensorrt: True` to enable TensorRT acceleration. In the first launch it will take about ten minutes to compile the model.
 
 ## Demo Launch
-Simply execute `python gradio_app.py` and open `http://localhost:7860/` in browser (Usually the port is `7860`).
+Simply execute `python gradio_app.py` and open `http://localhost:7860/` in the browser (Usually the port is `7860`).
 
-Upload an upper-half-body potrait of any anime characters, fuse reference and turn on the web camera. Click on start to launch face morphing. You may need to adjust some morphing parameters to fit your face with the character face (Especially for the eye-related parameters. The eyes generally fail to synthesize with incompatible parameters). 
+Upload an upper-half-body portrait of any anime characters, fuse reference, and turn on the web camera. Click on start to launch face morphing. You may need to adjust some morphing parameters to fit your face with the character's face (Especially for the eye-related parameters. The eyes generally fail to synthesize with incompatible parameters). 
 
 ## Hardware Requirement
 It generally takes about `12 GiB` of Device RAM to run the whole inference demo. However, you can unload the reference part after fusing the reference image. Then the synthesis-only model requires about `8 GiB` of Device RAM to run.
 
 # Acknowledgment
-
-Our work is based on [AnimateAnyone](https://github.com/MooreThreads/Moore-AnimateAnyone/blob/master), [Moore-AnimateAnyone](https://github.com/MooreThreads/Moore-AnimateAnyone), [Open-AnimateAnyone](https://github.com/guoqincode/Open-AnimateAnyone), [AnimateDiff](https://github.com/guoyww/AnimateDiff), [DWPose](https://github.com/IDEA-Research/DWPose), [TinyAutoencoder](https://github.com/madebyollin/taesdv), [AnimeFaceDetector](https://github.com/hysts/anime-face-detector). Thanks to these teams/authors for their work.
-
 Special thanks to [CivitAI Community](https://civit.ai) and [YODOYA](https://www.pixiv.net/users/101922785) for example images. Thanks to [Jianwen Meng](mailto:jwmeng@mail.ustc.edu.cn) for pipeline design.
